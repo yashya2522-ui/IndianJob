@@ -179,25 +179,32 @@ async function loadLiveJobs() {
             const card = document.createElement("div");
             card.className = "card";
 
-            card.innerHTML = `
-                <h3>${job.title}</h3>
-                <p><strong>Department:</strong> ${job.department}</p>
-                <p><strong>Category:</strong> ${job.category}</p>
-                <p><strong>Qualification:</strong> ${job.qualification}</p>
-                <p><strong>Salary:</strong> ${job.salary}</p>
-                <p><strong>Location:</strong> ${job.location}</p>
-                <p><strong>Vacancies:</strong> ${job.vacancies}</p>
-                <p><strong>Last Date:</strong> ${new Date(job.lastDate).toLocaleDateString("en-IN")}</p>
-                <a href="${job.officialApplyLink}" target="_blank" rel="noopener noreferrer">
-                    Apply Now
-                </a>
-            `;
+          card.innerHTML = `
+    <h3>${job.title}</h3>
+
+    <p><strong>Company:</strong> ${job.companyName || job.department}</p>
+    <p><strong>Category:</strong> ${job.category}</p>
+    <p><strong>Qualification:</strong> ${job.qualification}</p>
+    <p><strong>Experience:</strong> ${job.experience || "Not Specified"}</p>
+    <p><strong>Job Type:</strong> ${job.jobType || "Full Time"}</p>
+    <p><strong>Work Mode:</strong> ${job.workMode || "On-site"}</p>
+    <p><strong>Skills:</strong> ${job.skills || "Not Specified"}</p>
+    <p><strong>Description:</strong> ${job.description || "Not Specified"}</p>
+    <p><strong>Salary:</strong> ${job.salary}</p>
+    <p><strong>Location:</strong> ${job.location}</p>
+    <p><strong>Vacancies:</strong> ${job.vacancies}</p>
+    <p><strong>Last Date:</strong> ${new Date(job.lastDate).toLocaleDateString("en-IN")}</p>
+
+    <a href="${job.officialApplyLink}" target="_blank" rel="noopener noreferrer">
+        Apply Now
+    </a>
+`;
 
             container.appendChild(card);
         });
 
     } catch (error) {
-        container.innerHTML = "<p>Jobs load होत नाहीत. Please try again.</p>";
+        container.innerHTML = "<p>Jobs are not loading. Please try again.</p>";
     }
 }
 

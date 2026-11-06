@@ -219,6 +219,33 @@
                 </select>
 
                 <input id="qualification" placeholder="Qualification" required>
+                
+                <input id="companyName" placeholder="Company Name">
+
+<select id="experience">
+    <option value="Fresher">Fresher</option>
+    <option value="0-1 Year">0-1 Year</option>
+    <option value="1-3 Years">1-3 Years</option>
+    <option value="3-5 Years">3-5 Years</option>
+    <option value="5+ Years">5+ Years</option>
+</select>
+
+<select id="jobType">
+    <option value="Full Time">Full Time</option>
+    <option value="Part Time">Part Time</option>
+    <option value="Internship">Internship</option>
+    <option value="Contract">Contract</option>
+</select>
+
+<select id="workMode">
+    <option value="On-site">On-site</option>
+    <option value="Remote">Work From Home</option>
+    <option value="Hybrid">Hybrid</option>
+</select>
+
+<input id="skills" placeholder="Skills (Java, Python, SQL)">
+
+<textarea id="description" placeholder="Job Description"></textarea>
 
                 <input id="salary" placeholder="Salary">
 
@@ -341,6 +368,12 @@ document.getElementById("jobForm").addEventListener("submit", async function(e) 
         department: document.getElementById("department").value,
         category: document.getElementById("category").value,
         qualification: document.getElementById("qualification").value,
+        companyName: document.getElementById("companyName").value,
+experience: document.getElementById("experience").value,
+jobType: document.getElementById("jobType").value,
+workMode: document.getElementById("workMode").value,
+skills: document.getElementById("skills").value,
+description: document.getElementById("description").value,
         salary: document.getElementById("salary").value,
         location: document.getElementById("location").value,
         vacancies: Number(document.getElementById("vacancies").value || 0),

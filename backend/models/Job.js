@@ -24,6 +24,38 @@ const jobSchema = new mongoose.Schema(
       required: true
     },
 
+        // PRIVATE JOB DETAILS
+
+    companyName: {
+      type: String,
+      default: ""
+    },
+
+    experience: {
+      type: String,
+      default: "Fresher"
+    },
+
+    jobType: {
+      type: String,
+      default: "Full Time"
+    },
+
+    workMode: {
+      type: String,
+      default: "On-site"
+    },
+
+    skills: {
+      type: String,
+      default: ""
+    },
+
+    description: {
+      type: String,
+      default: ""
+    },
+    
     salary: {
       type: String,
       default: "As per rules"
