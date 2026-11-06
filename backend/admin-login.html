@@ -1,0 +1,143 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IndianJob Admin Login</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #0f172a;
+        }
+
+        .login-box {
+            width: 90%;
+            max-width: 400px;
+            background: white;
+            padding: 35px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px #00000030;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 10px;
+            color: #0f172a;
+        }
+
+        h1 span {
+            color: #2563eb;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #64748b;
+            margin-bottom: 25px;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px;
+            margin-bottom: 15px;
+            border: 1px solid #cbd5e1;
+            border-radius: 7px;
+            font-size: 15px;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 7px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        #message {
+            margin-top: 15px;
+            text-align: center;
+            font-size: 14px;
+            color: #dc2626;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="login-box">
+    <h1>Indian<span>Job</span></h1>
+    <p class="subtitle">Admin Login Portal</p>
+
+    <form id="loginForm">
+        <input type="email" id="email" placeholder="Admin Email" required>
+        <input type="password" id="password" placeholder="Admin Password" required>
+
+        <button type="submit">Login</button>
+    </form>
+
+    <p id="message"></p>
+</div>
+
+<script>
+const API = "https://indianjob-backend.onrender.com";
+
+document.getElementById("loginForm").addEventListener("submit", async function(e) {
+    e.preventDefault();
+
+    const message = document.getElementById("message");
+    message.textContent = "Logging in...";
+
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+
+    try {
+        const response = await fetch(`${API}/api/admin/login`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ email, password })
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+            message.textContent = result.message || "Login failed";
+            return;
+        }
+
+        localStorage.setItem("adminToken", result.token);
+
+        message.style.color = "green";
+        message.textContent = "Login successful!";
+
+        setTimeout(() => {
+            window.location.href = "admin.html";
+        }, 500);
+
+    } catch (error) {
+        message.textContent = "Server connection failed";
+    }
+});
+</script>
+
+</body>
+</html>

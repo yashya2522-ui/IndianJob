@@ -110,6 +110,29 @@ app.post("/api/admin/jobs", adminAuth, async (req, res) => {
         });
     }
 });
+
+// DELETE JOB - ADMIN ONLY
+app.delete("/api/admin/jobs/:id", adminAuth, async (req, res) => {
+    try {
+        const job = await Job.findByIdAndDelete(req.params.id);
+
+        if (!job) {
+            return res.status(404).json({
+                message: "Job not found"
+            });
+        }
+
+        res.json({
+            message: "Job deleted successfully"
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            message: "Error deleting job"
+        });
+    }
+});
+
 app.post("/api/login", async (req, res) => {
     try {
         const { email, password } = req.body;
