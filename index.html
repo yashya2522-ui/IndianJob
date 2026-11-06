@@ -115,6 +115,13 @@
     </div>
 
     <div class="card">
+    <h3>IndianJob Government Jobs</h3>
+    <p>Explore Government Jobs uploaded on IndianJob.</p>
+
+    <a href="government-jobs.html">View All Government Jobs</a>
+</div>
+
+    <div class="card">
         <h3>SSC Recruitment</h3>
         <p>Central Government Jobs</p>
         <a href="https://ssc.gov.in/" target="_blank">Official Website</a>
@@ -139,10 +146,36 @@
     </div>
 
     <div class="card">
-        <h3>Private Jobs</h3>
-        <p>IT, Software, BPO and Fresher Jobs</p>
-        <a href="https://www.naukri.com/" target="_blank">Explore Jobs</a>
-    </div>
+    <h3>IndianJob Private Jobs</h3>
+    <p>Explore Private Jobs uploaded on IndianJob.</p>
+
+    <a href="private-jobs.html">View All Private Jobs</a>
+</div>
+
+    <div class="card">
+    <h3>Explore Private Job Portals</h3>
+    <p>Explore jobs from India's top private job websites.</p>
+
+    <a href="https://www.naukri.com/" target="_blank">Naukri.com</a>
+    <br><br>
+
+    <a href="https://in.indeed.com/" target="_blank">Indeed</a>
+    <br><br>
+
+    <a href="https://www.linkedin.com/jobs/" target="_blank">LinkedIn Jobs</a>
+    <br><br>
+
+    <a href="https://www.foundit.in/" target="_blank">Foundit</a>
+    <br><br>
+
+    <a href="https://www.timesjobs.com/" target="_blank">TimesJobs</a>
+    <br><br>
+
+    <a href="https://internshala.com/" target="_blank">Internshala</a>
+    <br><br>
+
+    <a href="https://apna.co/" target="_blank">Apna Jobs</a>
+</div>
 
     <div class="card">
         <h3>UPSC</h3>
@@ -160,55 +193,7 @@
 
 <script>
 
-async function loadLiveJobs() {
-    const container = document.getElementById("liveJobs");
 
-    try {
-        const response = await fetch("https://indianjob-backend.onrender.com/api/jobs");
-
-        const jobs = await response.json();
-
-        container.innerHTML = "";
-
-        if (jobs.length === 0) {
-            container.innerHTML = "<p>No Jobs Available</p>";
-            return;
-        }
-
-        jobs.forEach(job => {
-            const card = document.createElement("div");
-            card.className = "card";
-
-          card.innerHTML = `
-    <h3>${job.title}</h3>
-
-    <p><strong>Company:</strong> ${job.companyName || job.department}</p>
-    <p><strong>Category:</strong> ${job.category}</p>
-    <p><strong>Qualification:</strong> ${job.qualification}</p>
-    <p><strong>Experience:</strong> ${job.experience || "Not Specified"}</p>
-    <p><strong>Job Type:</strong> ${job.jobType || "Full Time"}</p>
-    <p><strong>Work Mode:</strong> ${job.workMode || "On-site"}</p>
-    <p><strong>Skills:</strong> ${job.skills || "Not Specified"}</p>
-    <p><strong>Description:</strong> ${job.description || "Not Specified"}</p>
-    <p><strong>Salary:</strong> ${job.salary}</p>
-    <p><strong>Location:</strong> ${job.location}</p>
-    <p><strong>Vacancies:</strong> ${job.vacancies}</p>
-    <p><strong>Last Date:</strong> ${new Date(job.lastDate).toLocaleDateString("en-IN")}</p>
-
-    <a href="${job.officialApplyLink}" target="_blank" rel="noopener noreferrer">
-        Apply Now
-    </a>
-`;
-
-            container.appendChild(card);
-        });
-
-    } catch (error) {
-        container.innerHTML = "<p>Jobs are not loading. Please try again.</p>";
-    }
-}
-
-loadLiveJobs();
 
 function loadUserProfile() {
     const token = localStorage.getItem("indianJobToken");

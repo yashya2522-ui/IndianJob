@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>IndianJob - Government Jobs</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    margin: 0;
+    background: #f1f5f9;
+}
+
+header {
+    background: #0d47a1;
+    color: white;
+    padding: 20px;
+    text-align: center;
+}
+
+header a {
+    color: white;
+    text-decoration: none;
+}
+
+.container {
+    max-width: 1100px;
+    margin: auto;
+    padding: 25px;
+}
+
+.jobs {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.job-card {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px #00000010;
+}
+
+.job-card h3 {
+    color: #0d47a1;
+}
+
+.job-card p {
+    margin: 10px 0;
+    color: #444;
+}
+
+.job-card a {
+    display: inline-block;
+    margin-top: 15px;
+    background: #0d47a1;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 6px;
+    text-decoration: none;
+}
+
+#message {
+    text-align: center;
+    margin: 20px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1><a href="index.html">IndianJob</a></h1>
+    <p>Government Job Opportunities</p>
+</header>
+
+<div class="container">
+
+    <h2>Latest Government Jobs</h2>
+
+    <p id="message">Loading Government Jobs...</p>
+
+    <div class="jobs" id="governmentJobs"></div>
+
+</div>
+
+<script>
+
+async function loadGovernmentJobs() {
+
+    const container = document.getElementById("governmentJobs");
+    const message = document.getElementById("message");
+
+    try {
+
+        const response = await fetch(
+            "https://indianjob-backend.onrender.com/api/jobs"
+        );
+
+        const jobs = await response.json();
+
+        const governmentJobs = jobs.filter(job =>
+            job.category === "Government" &&
+            job.status === "Open"
+        );
+
+        container.innerHTML = "";
+
+        if (governmentJobs.length === 0) {
+            message.textContent = "No Government Jobs Available Currently.";
+            return;
+        }
+
+        message.textContent = "";
+
+        governmentJobs.forEach(job => {
+
+            const card = document.createElement("div");
+            card.className = "job-card";
+
+            card.innerHTML = `
+                <h3>${job.title}</h3>
+
+                <p><strong>Department:</strong> ${job.department}</p>
+
+                <p><strong>Qualification:</strong> ${job.qualification}</p>
+
+                <p><strong>Salary:</strong> ${job.salary}</p>
+
+                <p><strong>Location:</strong> ${job.location}</p>
+
+                <p><strong>Vacancies:</strong> ${job.vacancies}</p>
+
+                <p><strong>Last Date:</strong>
+                ${new Date(job.lastDate).toLocaleDateString("en-IN")}</p>
+
+                <a href="job-details.html?id=${job._id}">
+                    View Job Details
+                </a>
+            `;
+
+            container.appendChild(card);
+
+        });
+
+    } catch (error) {
+
+        message.textContent = "Unable to load Government Jobs.";
+
+    }
+
+}
+
+loadGovernmentJobs();
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>IndianJob - Private Jobs</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f1f5f9;
+        }
+
+        header {
+            background: #0d47a1;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        header a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 20px;
+        }
+
+        .jobs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .job-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px #00000010;
+        }
+
+        .job-card h3 {
+            color: #0d47a1;
+            margin-bottom: 12px;
+        }
+
+        .job-card p {
+            margin: 8px 0;
+            color: #444;
+        }
+
+        .job-card a {
+            display: inline-block;
+            margin-top: 15px;
+            background: #0d47a1;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 6px;
+            text-decoration: none;
+        }
+
+        .job-card a:hover {
+            background: #1565c0;
+        }
+
+        #message {
+            text-align: center;
+            margin: 20px;
+            color: #555;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1><a href="index.html">IndianJob</a></h1>
+    <p>Explore Private Job Opportunities</p>
+</header>
+
+<div class="container">
+
+    <h2>Latest Private Jobs</h2>
+
+    <p id="message">Loading Private Jobs...</p>
+
+    <div class="jobs" id="privateJobs"></div>
+
+</div>
+
+<script>
+
+async function loadPrivateJobs() {
+
+    const container = document.getElementById("privateJobs");
+    const message = document.getElementById("message");
+
+    try {
+
+        const response = await fetch(
+            "https://indianjob-backend.onrender.com/api/jobs"
+        );
+
+        const jobs = await response.json();
+
+        const privateJobs = jobs.filter(job =>
+            job.category === "Private" &&
+            job.status === "Open"
+        );
+
+        container.innerHTML = "";
+
+        if (privateJobs.length === 0) {
+            message.textContent = "No Private Jobs Available Currently.";
+            return;
+        }
+
+        message.textContent = "";
+
+        privateJobs.forEach(job => {
+
+            const card = document.createElement("div");
+            card.className = "job-card";
+
+            card.innerHTML = `
+                <h3>${job.title}</h3>
+
+                <p><strong>Company:</strong> ${job.companyName || job.department}</p>
+
+                <p><strong>Qualification:</strong> ${job.qualification}</p>
+
+                <p><strong>Experience:</strong> ${job.experience || "Fresher"}</p>
+
+                <p><strong>Job Type:</strong> ${job.jobType || "Full Time"}</p>
+
+                <p><strong>Work Mode:</strong> ${job.workMode || "On-site"}</p>
+
+                <p><strong>Salary:</strong> ${job.salary}</p>
+
+                <p><strong>Location:</strong> ${job.location}</p>
+
+                <a href="job-details.html?id=${job._id}">
+                    View Job Details
+                </a>
+            `;
+
+            container.appendChild(card);
+
+        });
+
+    } catch (error) {
+
+        message.textContent = "Unable to load jobs. Please try again.";
+
+    }
+
+}
+
+loadPrivateJobs();
+
+</script>
+
+</body>
+</html>

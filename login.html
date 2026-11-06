@@ -6,6 +6,30 @@
 <title>Indian Job - Login</title>
 
 <style>
+
+ .password-box {
+    position: relative;
+    width: 100%;
+}
+
+.password-box input {
+    width: 100%;
+    padding: 13px 45px 13px 13px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+.password-box span {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 20px;
+    user-select: none;
+}
+
 *{box-sizing:border-box}
 body{
 margin:0;font-family:Arial,sans-serif;
@@ -48,7 +72,10 @@ button:hover{background:#245ba0}
 <h3>Login to Your Account</h3>
 
 <input type="email" id="loginEmail" placeholder="Email Address">
-<input type="password" id="loginPassword" placeholder="Password">
+<div class="password-box">
+    <input type="password" id="loginPassword" placeholder="Password">
+    <span onclick="togglePassword('loginPassword', this)">👁</span>
+</div>
 
 <button onclick="loginUser()">Login</button>
 
@@ -63,7 +90,10 @@ Don't have an account?
 
 <input type="text" id="signupName" placeholder="Full Name">
 <input type="email" id="signupEmail" placeholder="Email Address">
-<input type="password" id="signupPassword" placeholder="Create Password">
+<div class="password-box">
+    <input type="password" id="signupPassword" placeholder="Create Password">
+    <span onclick="togglePassword('signupPassword', this)">👁</span>
+</div>
 
 <button onclick="signupUser()">Create Account</button>
 
@@ -83,6 +113,18 @@ Already have an account?
 
 <script>
 const API = "https://indianjob-backend.onrender.com";
+
+function togglePassword(id, icon) {
+    const input = document.getElementById(id);
+
+    if (input.type === "password") {
+        input.type = "text";
+        icon.textContent = "🙈";
+    } else {
+        input.type = "password";
+        icon.textContent = "👁";
+    }
+}
 
 function showSignup(){
 document.getElementById("login").style.display="none";

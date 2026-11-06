@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>IndianJob - Job Details</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f1f5f9;
+            margin: 0;
+        }
+
+        header {
+            background: #0d47a1;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        header a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 20px;
+        }
+
+        .job-box {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px #00000015;
+        }
+
+        h2 {
+            color: #0d47a1;
+        }
+
+        p {
+            margin: 15px 0;
+            color: #444;
+            line-height: 1.6;
+        }
+
+        .apply-btn {
+            display: inline-block;
+            background: #0d47a1;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 7px;
+            text-decoration: none;
+            margin-top: 20px;
+        }
+
+        .apply-btn:hover {
+            background: #1565c0;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1><a href="index.html">IndianJob</a></h1>
+    <p>Private Job Details</p>
+</header>
+
+<div class="container">
+
+    <div class="job-box" id="jobDetails">
+        <p>Loading Job Details...</p>
+    </div>
+
+</div>
+
+<script>
+
+async function loadJobDetails() {
+
+    const container = document.getElementById("jobDetails");
+
+    const params = new URLSearchParams(window.location.search);
+    const jobId = params.get("id");
+
+    if (!jobId) {
+        container.innerHTML = "<h2>Job ID Not Found</h2>";
+        return;
+    }
+
+    try {
+
+        const response = await fetch(
+            `https://indianjob-backend.onrender.com/api/jobs/${jobId}`
+        );
+
+        const job = await response.json();
+
+        if (!response.ok) {
+            container.innerHTML = "<h2>Job Not Found</h2>";
+            return;
+        }
+
+        container.innerHTML = `
+            <h2>${job.title}</h2>
+
+            <p><strong>Company:</strong> ${job.companyName || job.department}</p>
+
+            <p><strong>Category:</strong> ${job.category}</p>
+
+            <p><strong>Qualification:</strong> ${job.qualification}</p>
+
+            <p><strong>Experience:</strong> ${job.experience || "Fresher"}</p>
+
+            <p><strong>Job Type:</strong> ${job.jobType || "Full Time"}</p>
+
+            <p><strong>Work Mode:</strong> ${job.workMode || "On-site"}</p>
+
+            <p><strong>Skills:</strong> ${job.skills || "Not Specified"}</p>
+
+            <p><strong>Description:</strong> ${job.description || "Not Specified"}</p>
+
+            <p><strong>Salary:</strong> ${job.salary}</p>
+
+            <p><strong>Location:</strong> ${job.location}</p>
+
+            <p><strong>Vacancies:</strong> ${job.vacancies}</p>
+
+            <p><strong>Last Date:</strong> ${new Date(job.lastDate).toLocaleDateString("en-IN")}</p>
+
+            <p><strong>Application Fee:</strong> ${job.applicationFee}</p>
+
+            <a class="apply-btn"
+               href="${job.officialApplyLink}"
+               target="_blank"
+               rel="noopener noreferrer">
+               Apply Now
+            </a>
+
+            <br><br>
+
+            <a href="private-jobs.html">← Back to Private Jobs</a>
+        `;
+
+    } catch (error) {
+
+        container.innerHTML = "<h2>Unable to load Job Details</h2>";
+
+    }
+
+}
+
+loadJobDetails();
+
+</script>
+
+</body>
+</html>
