@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Indian Job - Login</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+margin:0;font-family:Arial,sans-serif;
+background:linear-gradient(135deg,#123a72,#3478c8);
+min-height:100vh;display:flex;
+justify-content:center;align-items:center;
+}
+.container{
+background:white;width:380px;max-width:95%;
+padding:30px;border-radius:18px;
+box-shadow:0 10px 30px #0003;
+}
+h1{text-align:center;color:#123a72}
+.subtitle{text-align:center;color:gray}
+input{
+width:100%;padding:13px;margin:10px 0;
+border:1px solid #ddd;border-radius:8px;
+}
+button{
+width:100%;padding:13px;background:#123a72;
+color:white;border:none;border-radius:8px;
+cursor:pointer;font-size:16px;
+}
+button:hover{background:#245ba0}
+.switch{text-align:center;margin-top:20px}
+.switch a{color:#123a72;font-weight:bold;cursor:pointer}
+.back{text-align:center;margin-top:20px}
+.back a{color:#123a72;text-decoration:none}
+#message{text-align:center;font-weight:bold;margin-top:15px}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<h1>🇮🇳 Indian Job</h1>
+<p class="subtitle">Your Career Starts Here</p>
+
+<div id="login">
+<h3>Login to Your Account</h3>
+
+<input type="email" id="loginEmail" placeholder="Email Address">
+<input type="password" id="loginPassword" placeholder="Password">
+
+<button onclick="loginUser()">Login</button>
+
+<p class="switch">
+Don't have an account?
+<a onclick="showSignup()">Sign Up</a>
+</p>
+</div>
+
+<div id="signup" style="display:none">
+<h3>Create New Account</h3>
+
+<input type="text" id="signupName" placeholder="Full Name">
+<input type="email" id="signupEmail" placeholder="Email Address">
+<input type="password" id="signupPassword" placeholder="Create Password">
+
+<button onclick="signupUser()">Create Account</button>
+
+<p class="switch">
+Already have an account?
+<a onclick="showLogin()">Login</a>
+</p>
+</div>
+
+<p id="message"></p>
+
+<div class="back">
+<a href="index.html">← Back to Homepage</a>
+</div>
+
+</div>
+
+<script>
+const API = "http://localhost:5000";
+
+function showSignup(){
+document.getElementById("login").style.display="none";
+document.getElementById("signup").style.display="block";
+document.getElementById("message").textContent="";
+}
+
+function showLogin(){
+document.getElementById("signup").style.display="none";
+document.getElementById("login").style.display="block";
+document.getElementById("message").textContent="";
+}
+
+async function signupUser(){
+const name=document.getElementById("signupName").value.trim();
+const email=document.getElementById("signupEmail").value.trim();
+const password=document.getElementById("signupPassword").value;
+
+const message=document.getElementById("message");
+
+if(!name||!email||!password){
+message.style.color="red";
+message.textContent="Please fill all fields!";
+return;
+}
+
+try{
+const response=await fetch(API+"/api/signup",{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({name,email,password})
+});
+
+const data=await response.json();
+
+if(response.ok){
+message.style.color="green";
+message.textContent="Signup successful! Please Login.";
+showLogin();
+}else{
+message.style.color="red";
+message.textContent=data.message;
+}
+}catch(error){
+message.style.color="red";
+message.textContent="Backend connection failed!";
+}
+}
+
+async function loginUser(){
+const email=document.getElementById("loginEmail").value.trim();
+const password=document.getElementById("loginPassword").value;
+const message=document.getElementById("message");
+
+if(!email||!password){
+message.style.color="red";
+message.textContent="Please enter email and password!";
+return;
+}
+
+try{
+const response=await fetch(API+"/api/login",{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({email,password})
+});
+
+const data=await response.json();
+
+if(response.ok){
+localStorage.setItem("indianJobToken",data.token);
+localStorage.setItem("indianJobUser",data.name);
+
+message.style.color="green";
+message.textContent="Login successful!";
+
+setTimeout(()=>{
+window.location.href="index.html";
+},1000);
+
+}else{
+message.style.color="red";
+message.textContent=data.message;
+}
+}catch(error){
+message.style.color="red";
+message.textContent="Backend connection failed!";
+}
+}
+</script>
+
+</body>
+</html>

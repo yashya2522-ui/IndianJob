@@ -1,0 +1,208 @@
+﻿
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Indian Job</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f1f5fb;
+        }
+
+        header {
+            background: #123a72;
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .hero h2 {
+            font-size: 32px;
+            color: #123a72;
+        }
+
+        .search {
+            padding: 12px;
+            width: 60%;
+            max-width: 400px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+
+        button {
+            padding: 12px 20px;
+            background: #123a72;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .jobs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            padding: 25px;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px #ddd;
+        }
+
+        .card h3 {
+            color: #123a72;
+        }
+
+        .card a {
+            display: inline-block;
+            background: #123a72;
+            color: white;
+            padding: 10px;
+            border-radius: 6px;
+            text-decoration: none;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: #123a72;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="top">
+    <div class="brand">Indian Job</div>
+    <div class="tag">Government + Private Jobs | India-wide</div>
+
+    <div id="userArea" style="margin-top:15px">
+        <a href="login.html">Login / Signup</a>
+    </div>
+</header>
+
+
+
+
+<section class="hero">
+    <h2>Find Your Dream Job</h2>
+    <p>Explore Government and Private Job Opportunities</p>
+
+    <input class="search" id="search" placeholder="Search SSC, Railway, Police...">
+    <button onclick="searchJobs()">Search</button>
+</section>
+
+<section class="jobs" id="jobs">
+
+    <div class="card">
+        <h3>SSC Recruitment</h3>
+        <p>Central Government Jobs</p>
+        <a href="https://ssc.gov.in/" target="_blank">Apply / Official Website</a>
+    </div>
+
+    <div class="card">
+        <h3>Railway Jobs</h3>
+        <p>RRB NTPC, Group D, ALP</p>
+        <a href="https://www.rrbcdg.gov.in/" target="_blank">Official Website</a>
+    </div>
+
+    <div class="card">
+        <h3>Indian Army</h3>
+        <p>Army Recruitment Opportunities</p>
+        <a href="https://joinindianarmy.nic.in/" target="_blank">Official Website</a>
+    </div>
+
+    <div class="card">
+        <h3>MPSC / Police</h3>
+        <p>Maharashtra Government Jobs</p>
+        <a href="https://mpsc.gov.in/" target="_blank">Official Website</a>
+    </div>
+
+    <div class="card">
+        <h3>Private Jobs</h3>
+        <p>IT, Software, BPO and Fresher Jobs</p>
+        <a href="https://www.naukri.com/" target="_blank">Explore Jobs</a>
+    </div>
+
+    <div class="card">
+        <h3>UPSC</h3>
+        <p>Civil Services and Other Examinations</p>
+        <a href="https://upsc.gov.in/" target="_blank">Official Website</a>
+    </div>
+
+</section>
+
+<footer>
+    Created by Yash Krishnat Patil
+    <br>
+    © Indian Job
+</footer>
+
+<script>
+
+function loadUserProfile() {
+    const token = localStorage.getItem("indianJobToken");
+    const name = localStorage.getItem("indianJobUser");
+    const userArea = document.getElementById("userArea");
+
+    if (!userArea) return;
+
+    if (token && name) {
+        userArea.innerHTML =
+            '<button onclick="showProfile()">Welcome, ' + name + '</button>' +
+            '<button onclick="logoutUser()">Logout</button>';
+    } else {
+        userArea.innerHTML =
+            '<a href="login.html">Login / Signup</a>';
+    }
+}
+
+function showProfile() {
+    const name = localStorage.getItem("indianJobUser");
+
+    alert("MY PROFILE\n\nName: " + name);
+}
+
+function logoutUser() {
+    localStorage.removeItem("indianJobToken");
+    localStorage.removeItem("indianJobUser");
+
+    alert("Logout Successful!");
+
+    window.location.href = "login.html";
+}
+
+function searchJobs() {
+    let input = document.getElementById("search").value.toLowerCase();
+    let cards = document.querySelectorAll(".card");
+
+    cards.forEach(card => {
+        card.style.display = card.innerText.toLowerCase().includes(input)
+            ? "block"
+            : "none";
+    });
+}
+
+loadUserProfile();
+
+</script>
+
+</body>
+</html>
+
