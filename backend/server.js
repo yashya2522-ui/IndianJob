@@ -4,8 +4,9 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
-
+const adminAuth = require("./middleware/adminAuth");
 const User = require("./models/User");
+const Job = require("./models/Job");
 const app = express();
 
 app.use(cors());
@@ -13,6 +14,31 @@ app.use(express.json());
 
 app.get("/", (req, res) => {
     res.send("Indian Job Backend Running Successfully!");
+});
+
+// GET ALL JOBS
+app.get("/api/jobs", async (req, res) => {
+    try {
+        const jobs = await Job.find().sort({ createdAt: -1 });
+        res.json(jobs);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
+
+// GET SINGLE JOB
+app.get("/api/jobs/:id", async (req, res) => {
+    try {
+        const job = await Job.findById(req.params.id);
+
+        if (!job) {
+            return res.status(404).json({ message: "Job not found" });
+        }
+
+        res.json(job);
+    } catch (err) {
+        res.status(400).json({ message: "Invalid job ID" });
+    }
 });
 
 app.post("/api/signup", async (req, res) => {
@@ -38,6 +64,52 @@ app.post("/api/signup", async (req, res) => {
     }
 });
 
+// ADMIN LOGIN
+app.post("/api/admin/login", async (req, res) => {
+    try {
+        const { email, password } = req.body;
+
+        if (
+            email !== process.env.ADMIN_EMAIL ||
+            password !== process.env.ADMIN_PASSWORD
+        ) {
+            return res.status(401).json({
+                message: "Invalid admin credentials"
+            });
+        }
+
+        const token = jwt.sign(
+            { role: "admin" },
+            process.env.JWT_SECRET,
+            { expiresIn: "1d" }
+        );
+
+        res.json({
+            message: "Admin login successful",
+            token
+        });
+
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
+
+// ADMIN ADD JOB
+app.post("/api/admin/jobs", adminAuth, async (req, res) => {
+    try {
+        const job = await Job.create(req.body);
+
+        res.status(201).json({
+            message: "Job added successfully",
+            job
+        });
+
+    } catch (err) {
+        res.status(400).json({
+            message: err.message
+        });
+    }
+});
 app.post("/api/login", async (req, res) => {
     try {
         const { email, password } = req.body;
